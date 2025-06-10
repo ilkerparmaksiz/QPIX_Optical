@@ -28,7 +28,10 @@ SET(SRC   ActionInitialization.cpp
           SupernovaTiming.cpp
           TrackingAction.cpp
           TrackingSD.cpp
-          TrackingHit.cpp)
+          TrackingHit.cpp
+          OpticalMaterialProperties.cpp
+          LiquidArgonProperties.cpp
+        )
 
 add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC} QPixG4Dict.cxx)
 

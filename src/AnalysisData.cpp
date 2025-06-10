@@ -95,6 +95,11 @@ void AnalysisData::EventReset()
   particle_initial_z_.clear();
   particle_initial_t_.clear();
 
+  particle_final_x_.clear();
+  particle_final_y_.clear();
+  particle_final_z_.clear();
+  particle_final_t_.clear();
+
   particle_initial_px_.clear();
   particle_initial_py_.clear();
   particle_initial_pz_.clear();
@@ -198,7 +203,10 @@ void AnalysisData::AddMCParticle(MCParticle const * particle)
   particle_initial_y_.push_back(particle->InitialPosition().Y());
   particle_initial_z_.push_back(particle->InitialPosition().Z());
   particle_initial_t_.push_back(particle->InitialPosition().T());
-
+  particle_final_x_.push_back(particle->FinalPosition().X());
+  particle_final_y_.push_back(particle->FinalPosition().Y());
+  particle_final_z_.push_back(particle->FinalPosition().Z());
+  particle_final_t_.push_back(particle->FinalPosition().T());
   particle_initial_px_.push_back(particle->InitialMomentum().X());
   particle_initial_py_.push_back(particle->InitialMomentum().Y());
   particle_initial_pz_.push_back(particle->InitialMomentum().Z());

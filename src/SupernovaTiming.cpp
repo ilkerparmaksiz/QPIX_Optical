@@ -99,7 +99,10 @@ double SupernovaTiming::Sample(double const energy)
 
     // sample from time distribution
     double const time = th1_time->GetRandom();  // sec
+    //if(time<0){
+    //	std::cout << "Energy " << energy << " Time " << time << std::endl;
 
+   // }
     return time;
 }
 

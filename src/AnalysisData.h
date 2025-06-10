@@ -84,6 +84,11 @@ class AnalysisData {
     std::vector< double > particle_initial_pz_;
     std::vector< double > particle_initial_energy_;
 
+    std::vector< double > particle_final_x_;
+    std::vector< double > particle_final_y_;
+    std::vector< double > particle_final_z_;
+    std::vector< double > particle_final_t_;
+
     std::vector< int >    hit_track_id_;
     std::vector< int >    hit_pdg_code_;
     std::vector< double > hit_start_x_;

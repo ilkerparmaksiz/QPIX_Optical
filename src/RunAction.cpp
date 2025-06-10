@@ -53,11 +53,9 @@ void RunAction::BeginOfRunAction(const G4Run* g4run)
     particleType_ = ConfigManager::GetParticleType();
 
 
-
-    particleType_.toLower();
-    generator_.toLower();
-    genieFormat_.toLower();
-
+     G4StrUtil::to_lower(particleType_);
+     G4StrUtil::to_lower(generator_);
+     G4StrUtil::to_lower(genieFormat_);
     //ConfigManager::Print();
 
     if (generator_ == "marley") {
@@ -97,10 +95,10 @@ void RunAction::BeginOfRunAction(const G4Run* g4run)
         std::ostringstream ss;
         ss << std::setw(4) << std::setfill('0') << g4run->GetRunID();
         std::string runStr_(ss.str());
-        G4String parentPath_ = outputFile_(0, outputFile_.last('/'));
-        G4String baseName_ = outputFile_(outputFile_.last('/')+1, outputFile_.length());
-        G4String stem_ = baseName_(0, baseName_.last('.'));
-        G4String extension_ = baseName_(baseName_.last('.'), baseName_.length());
+        G4String parentPath_ = outputFile_.substr(0, outputFile_.find_last_of('/'));
+        G4String baseName_ = outputFile_.substr(outputFile_.find_last_of('/')+1, outputFile_.length());
+        G4String stem_ = baseName_.substr(0, baseName_.find_last_of('.'));
+        G4String extension_ = baseName_.substr(baseName_.find_last_of('.'), baseName_.length());
         
         root_output_path = parentPath_;
         root_output_path += "/";

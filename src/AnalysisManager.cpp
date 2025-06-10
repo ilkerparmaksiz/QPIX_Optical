@@ -139,6 +139,10 @@ void AnalysisManager::Book(const std::string& file_path)
     event_tree_->Branch("particle_initial_y",       &event.particle_initial_y_);
     event_tree_->Branch("particle_initial_z",       &event.particle_initial_z_);
     event_tree_->Branch("particle_initial_t",       &event.particle_initial_t_);
+    event_tree_->Branch("particle_final_x",       &event.particle_final_x_);
+    event_tree_->Branch("particle_final_y",       &event.particle_final_y_);
+    event_tree_->Branch("particle_final_z",       &event.particle_final_z_);
+    event_tree_->Branch("particle_final_t",       &event.particle_final_t_);
     event_tree_->Branch("particle_initial_px",      &event.particle_initial_px_);
     event_tree_->Branch("particle_initial_py",      &event.particle_initial_py_);
     event_tree_->Branch("particle_initial_pz",      &event.particle_initial_pz_);

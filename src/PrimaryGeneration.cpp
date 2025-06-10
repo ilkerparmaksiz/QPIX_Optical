@@ -348,6 +348,7 @@ void PrimaryGeneration::MARLEYGeneratePrimaries(G4Event* event)
 
   // get MARLEY manager and generator
   MARLEYManager * marley_manager = MARLEYManager::Instance();
+  //if(!marley_manager){ std::cout << "Marley manger is empty" <<std::endl;}
   marley::Generator & marley_generator = marley_manager->Generator();
 
   // add padding so that electron tracks don't get truncated near the
@@ -385,6 +386,7 @@ void PrimaryGeneration::MARLEYGeneratePrimaries(G4Event* event)
     }
   }
 
+  
   //---------------------------------------------------------------------------
   // Isotropic sample
   // ================
@@ -453,6 +455,7 @@ void PrimaryGeneration::MARLEYGeneratePrimaries(G4Event* event)
     //-------------------------------------------------------------------------
   } // End IF isotrpoic
 
+  
   //---------------------------------------------------------------------------
 
   // timing
@@ -502,8 +505,9 @@ void PrimaryGeneration::MARLEYGeneratePrimaries(G4Event* event)
 
   // Get a function to randomize over for the exponential decay of the K40
   // Keep flexible to set different decay times if later needed
+  //TF1 *expDecay = new TF1(("exponentialDecay_"+std::to_string(event->GetEventID())).c_str(),"exp(-x/[0])",0,10000); 
   TF1 *expDecay = new TF1("exponentialDecay","exp(-x/[0])",0,10000);
-
+	
   // Loop over each of the final particles in the MARLEY event
   for (const auto& fp : ev.get_final_particles())
   {

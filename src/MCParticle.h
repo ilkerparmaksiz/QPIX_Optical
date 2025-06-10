@@ -108,6 +108,7 @@ class MCParticle
         inline double EnergyDeposited() const { return energy_deposited_; }
 
         inline TLorentzVector InitialPosition() const { return initial_position_; }
+        inline TLorentzVector FinalPosition() const { return final_position_; }
         inline TLorentzVector InitialMomentum() const { return initial_momentum_; }
 
         inline void SetTrackID(int const trackID)               { track_id_ = trackID;               }
@@ -120,6 +121,7 @@ class MCParticle
         inline void SetTotalOccupancy(int const totalOccupancy) { total_occupancy_ = totalOccupancy; }
 
         inline void SetInitialPosition(TLorentzVector const initialPosition) { initial_position_ = initialPosition; }
+        inline void SetFinalPosition(TLorentzVector const finalPosition) { final_position_ = finalPosition; }
         inline void SetInitialMomentum(TLorentzVector const initialMomentum) { initial_momentum_ = initialMomentum; }
 
     private:
@@ -136,6 +138,7 @@ class MCParticle
         double      energy_deposited_ = 0.;
 
         TLorentzVector initial_position_;
+        TLorentzVector final_position_;
         TLorentzVector initial_momentum_;
 
         // std::vector< TrajectoryPoint > trajectory_;

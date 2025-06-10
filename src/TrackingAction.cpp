@@ -18,7 +18,7 @@
 // C++ includes
 #include <iostream>
 #include <fstream>
-
+#include "G4OpticalPhoton.hh"
 TrackingAction::TrackingAction()
 {}
 
@@ -29,7 +29,10 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
     // get MC truth manager
     MCTruthManager * mc_truth_manager = MCTruthManager::Instance();
-
+    auto PDefi = track->GetDynamicParticle()->GetParticleDefinition();
+    /*if(PDefi==G4OpticalPhoton::Definition()){
+        std::cout << "photon"<<std::endl;
+    }*/
     // create new MCParticle object
     MCParticle * particle = new MCParticle();
     particle->SetTrackID(track->GetTrackID());
@@ -48,6 +51,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
             track->GetGlobalTime()   / CLHEP::ns
         )
     );
+
 
     particle->SetInitialMomentum(
         TLorentzVector(
@@ -80,6 +84,18 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
 
     // get MC particle
     MCParticle * particle = mc_truth_manager->GetMCParticle(track->GetTrackID());
+    auto PDefi = track->GetDynamicParticle()->GetParticleDefinition();
+    if(PDefi==G4OpticalPhoton::Definition()){
+        //std::cout << "photon"<<std::endl;
+        particle->SetFinalPosition(
+                TLorentzVector(
+                        track->GetStep()->GetPostStepPoint()->GetPosition().x() / CLHEP::cm,
+                        track->GetStep()->GetPostStepPoint()->GetPosition().y()  / CLHEP::cm,
+                        track->GetStep()->GetPostStepPoint()->GetPosition().z()  / CLHEP::cm,
+                        track->GetStep()->GetPostStepPoint()->GetGlobalTime()   / CLHEP::ns
+                )
+        );
+    }
 
     // set process
     if (track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep() != 0) {
