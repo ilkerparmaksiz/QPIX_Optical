@@ -54,9 +54,9 @@ int main(int argc, char** argv)
 
   // Construct the run manager and set the initialization classes
   auto* run_manager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
-
   G4VModularPhysicsList* physics_list = new FTFP_BERT_HP();
   physics_list->ReplacePhysics(new G4EmStandardPhysics_option4());
+  physics_list->RegisterPhysics(new G4OpticalPhysics());
   run_manager->SetUserInitialization(physics_list);
 
   run_manager->SetUserInitialization(new DetectorConstruction());
