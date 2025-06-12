@@ -41,6 +41,7 @@ class AnalysisData {
     void AddFinalGeneratorParticle(GeneratorParticle const *);
 
     void AddMCParticle(MCParticle const *);
+    void AddPhotonHits(double x ,double y, double z,double t, double wavelength );
 
     int ProcessToKey(const G4String &);
 
@@ -146,6 +147,13 @@ class AnalysisData {
     std::vector< int >    generator_final_particle_pdg_code_;
     std::vector< double > generator_final_particle_mass_;
     std::vector< double > generator_final_particle_charge_;
+
+    std::vector< double > photon_hit_x;
+    std::vector< double > photon_hit_y;
+    std::vector< double > photon_hit_z;
+    std::vector< double > photon_hit_t;
+    std::vector< double > photon_hit_wavelength;
+
 
 };
 

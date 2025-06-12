@@ -163,7 +163,11 @@ void AnalysisManager::Book(const std::string& file_path)
     event_tree_->Branch("hit_end_t",          &event.hit_end_t_);
     event_tree_->Branch("hit_energy_deposit", &event.hit_energy_deposit_);
     event_tree_->Branch("hit_length",         &event.hit_length_);
-    event_tree_->Branch("hit_process_key",    &event.hit_process_key_);
+    event_tree_->Branch("photon_hit_x",    &event.photon_hit_x);
+    event_tree_->Branch("photon_hit_y",    &event.photon_hit_y);
+    event_tree_->Branch("photon_hit_z",    &event.photon_hit_z);
+    event_tree_->Branch("photon_hit_t",    &event.photon_hit_t);
+    event_tree_->Branch("photon_hit_wavelength",    &event.photon_hit_wavelength);
   }
 }
 
