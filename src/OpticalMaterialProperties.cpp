@@ -43,20 +43,24 @@ G4MaterialPropertiesTable* OpticalMaterialProperties::OpticalLAr()
   eWidth = (12.04*eV - 8.104*eV) / sc_entries;
   
   std::vector<G4double> sc_energy;
+  std::vector<G4double> rf;
   for (int j=0; j<sc_entries; j++)
   {
     sc_energy.push_back(8.104*eV + j * eWidth);
+    rf.push_back(1.45);
   }
 
   std::vector<G4double> intensity;
   LAr_prop.Scintillation(sc_energy, intensity);
 
   assert(sc_energy.size() == intensity.size());
+
+
   // RINDEX is needed
   // Set the Birks Constant for the LXe scintillator
   //LAr_mpt->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);
 
-    LAr_mpt->AddProperty("FASTCOMPONENT", sc_energy.data(), intensity.data(), sc_energy.size(),true);
+  LAr_mpt->AddProperty("FASTCOMPONENT", sc_energy.data(), intensity.data(), sc_energy.size(),true);
   LAr_mpt->AddProperty("SLOWCOMPONENT", sc_energy.data(), intensity.data(), sc_energy.size(),true);
   LAr_mpt->AddProperty("SCINTILLATIONCOMPONENT1", sc_energy.data(), intensity.data(),sc_energy.size());
   LAr_mpt->AddProperty("SCINTILLATIONCOMPONENT2", sc_energy.data(), intensity.data(),sc_energy.size());
@@ -84,6 +88,7 @@ G4MaterialPropertiesTable* OpticalMaterialProperties::OpticalLAr()
 
   assert(abs_energy.size() == abs_length.size());
   LAr_mpt->AddProperty("ABSLENGTH", abs_energy.data(), abs_length.data(), abs_energy.size());
+  LAr_mpt->AddProperty("RINDEX", sc_energy.data(), rf.data(), sc_energy.size());
 
   return LAr_mpt;
 }
@@ -271,3 +276,23 @@ G4MaterialPropertiesTable* OpticalMaterialProperties::TPB()
   return mpt;
 }
 
+G4MaterialPropertiesTable * OpticalMaterialProperties::PerfectDetector() {
+    G4MaterialPropertiesTable *mpt = new G4MaterialPropertiesTable();
+
+    // REFLECTIVITY
+    const G4int ri_entries = 200;
+    G4double eWidth = (optPhotMaxE_ - optPhotMinE_) / ri_entries;
+    std::vector<G4double> REFLECTIVITY;
+    std::vector<G4double> EFFICIENCY;
+    std::vector<G4double> ri_energy;
+    for (int i = 0; i < ri_entries; i++) {
+        ri_energy.push_back(optPhotMinE_ + i * eWidth);
+        REFLECTIVITY.push_back(0.0);
+        EFFICIENCY.push_back(1);
+    }
+
+
+    mpt->AddProperty("REFLECTIVITY", ri_energy, REFLECTIVITY);
+    mpt->AddProperty("EFFICIENCY", ri_energy, EFFICIENCY);
+    return mpt;
+}

@@ -33,6 +33,7 @@ static G4MaterialPropertiesTable* FakeGrid(G4double transparency=.9,
 static G4MaterialPropertiesTable* TPB();
 
 static G4MaterialPropertiesTable* PTFE();
+static G4MaterialPropertiesTable * PerfectDetector();
 
 
 private:

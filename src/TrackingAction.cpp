@@ -83,33 +83,6 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     MCParticle* particle = mc_truth_manager->GetMCParticle(track->GetTrackID());
     auto* PDefi = track->GetDynamicParticle()->GetParticleDefinition();
 
-    // Only care about optical photons
-    if (PDefi == G4OpticalPhoton::Definition()) {
-        // Get the name of the volume where the track ended
-        G4String volName = track->GetStep()->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetName();
-
-        // Check if it died in the silicon detector
-        if (volName == "Photon_detector.physical") {
-            G4ThreeVector pos = track->GetStep()->GetPostStepPoint()->GetPosition();
-            G4double time = track->GetStep()->GetPostStepPoint()->GetGlobalTime();
-
-            // Save in your MCParticle if you want
-            particle->SetFinalPosition(
-                TLorentzVector(
-                    pos.x() / CLHEP::cm,
-                    pos.y() / CLHEP::cm,
-                    pos.z() / CLHEP::cm,
-                    time   / CLHEP::ns
-                )
-            );
-
-            // Print or store
-            std::cout << "[Photon Detection] at Silicon volume:" << std::endl;
-            std::cout << " → Position (cm): " << pos / CLHEP::cm << std::endl;
-            std::cout << " → Time (ns): " << time / CLHEP::ns << std::endl;
-        }
-    }
-
     // Set process name
     if (track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep() != nullptr) {
         particle->SetProcess(track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName());

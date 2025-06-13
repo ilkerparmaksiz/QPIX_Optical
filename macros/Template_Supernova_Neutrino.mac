@@ -15,12 +15,12 @@
 /inputs/vertex_z 1.8 m
 
 # configure supernova timing
-/supernova/timing/on  true
+/supernova/timing/on  false
 /inputs/input_file nusperbin2d_shifted2s.root #/n/holystore01/LABS/guenette_lab/Everyone/supernova/nusperbin2d.root
 /supernova/timing/th2_name  nusperbin2d_nue
 
 # output path
-/inputs/output_file ../output/SUPERNOVA_NEUTRINO.root
+/inputs/output_file test.root
 
 # initialize run
 /run/initialize
@@ -33,4 +33,4 @@
 #/grdm/nucleusLimits 1 35 1 17  # aMin aMax zMin zMax
 
 # run
-/run/beamOn 10
+/run/beamOn 3

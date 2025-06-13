@@ -12,7 +12,7 @@
 // Qpix includes
 #include "AnalysisData.h"
 #include "ConfigManager.h"
-
+#include "../cfg/config.h"
 // Geant4 includes
 #include "G4AutoLock.hh"
 
@@ -32,10 +32,11 @@ AnalysisManager * AnalysisManager::instance_ = 0;
 
 //-----------------------------------------------------------------------------
 AnalysisManager::AnalysisManager()
-  : tfile_(0), metadata_(0), event_tree_(0)
+  : tfile_(0), metadata_(0), event_tree_(0), G4_Optical_tree_(0), Opticks_Optical_tree_(0),  G4event_id(0)
 {
 #ifdef G4ANALYSIS_USE
 #endif
+
 }
 
 //-----------------------------------------------------------------------------
@@ -58,7 +59,7 @@ void AnalysisManager::Book(const std::string& file_path)
 {
 
   if (!G4Threading::IsMasterThread()) return; // only run Book() for the master thread
-
+  Reset();
   // Check if tfile_ is a null pointer, if so, create ROOT output file
   if (tfile_ == 0) {
     //G4cout << "Testing file_path.data() for null pointer. file_path.data() = " << file_path.data() << G4endl;
@@ -105,7 +106,7 @@ void AnalysisManager::Book(const std::string& file_path)
     event_tree_->Branch("generator_intermediate_particle_px",       &event.generator_intermediate_particle_px_);
     event_tree_->Branch("generator_intermediate_particle_py",       &event.generator_intermediate_particle_py_);
     event_tree_->Branch("generator_intermediate_particle_pz",       &event.generator_intermediate_particle_pz_);
-    event_tree_->Branch("generator_intermediate_particle_energy",   &event.generator_intermediate_particle_energy_);
+    event_tree_->Branch("generator_intermediate_particle_energy",&event.generator_intermediate_particle_energy_);
     event_tree_->Branch("generator_intermediate_particle_pdg_code", &event.generator_intermediate_particle_pdg_code_);
     event_tree_->Branch("generator_intermediate_particle_mass",     &event.generator_intermediate_particle_mass_);
     event_tree_->Branch("generator_intermediate_particle_charge",   &event.generator_intermediate_particle_charge_);
@@ -163,12 +164,62 @@ void AnalysisManager::Book(const std::string& file_path)
     event_tree_->Branch("hit_end_t",          &event.hit_end_t_);
     event_tree_->Branch("hit_energy_deposit", &event.hit_energy_deposit_);
     event_tree_->Branch("hit_length",         &event.hit_length_);
-    event_tree_->Branch("photon_hit_x",    &event.photon_hit_x);
-    event_tree_->Branch("photon_hit_y",    &event.photon_hit_y);
-    event_tree_->Branch("photon_hit_z",    &event.photon_hit_z);
-    event_tree_->Branch("photon_hit_t",    &event.photon_hit_t);
-    event_tree_->Branch("photon_hit_wavelength",    &event.photon_hit_wavelength);
+
+      // Optical Tree
+      if(G4_Optical_tree_ == 0){
+          G4_Optical_tree_ = new TTree("G4_Photons", "Geant4 Photon Hit Information");
+          //G4_Optical_tree_->Branch("run",   &event.run_,   "run/I");
+          G4_Optical_tree_->Branch("event_id", &G4event_id);
+          G4_Optical_tree_->Branch("photon_hit_x",    &G4_photon_hit_x);
+          G4_Optical_tree_->Branch("photon_hit_y",    &G4_photon_hit_y);
+          G4_Optical_tree_->Branch("photon_hit_z",    &G4_photon_hit_z);
+          G4_Optical_tree_->Branch("photon_hit_t",    &G4_photon_hit_t);
+          G4_Optical_tree_->Branch("photon_hit_wavelength",    &G4_photon_hit_wavelength);
+      }
+#ifdef With_Opticks
+      // Opticks Tree
+      if(Opticks_Optical_tree_ == 0){
+          Opticks_Optical_tree_ = new TTree("Opticks_Photons", "Opticks Photon Hit Information");
+          //Opticks_Optical_tree_->Branch("run",   &event.run_,   "run/I");
+          Opticks_Optical_tree_->Branch("event_id", &Opticks_event_id);
+          Opticks_Optical_tree_->Branch("photon_hit_x",    &Opticks_photon_hit_x);
+          Opticks_Optical_tree_->Branch("photon_hit_y",    &Opticks_photon_hit_y);
+          Opticks_Optical_tree_->Branch("photon_hit_z",    &Opticks_photon_hit_z);
+          Opticks_Optical_tree_->Branch("photon_hit_t",    &Opticks_photon_hit_t);
+          Opticks_Optical_tree_->Branch("photon_hit_wavelength",    &Opticks_photon_hit_wavelength);
+      }
+#endif
   }
+}
+
+void AnalysisManager::Reset() {
+    G4event_id.clear();
+    G4event_id.shrink_to_fit();
+    G4_photon_hit_x.clear();
+    G4_photon_hit_x.shrink_to_fit();
+    G4_photon_hit_y.clear();
+    G4_photon_hit_y.shrink_to_fit();
+    G4_photon_hit_z.clear();
+    G4_photon_hit_z.shrink_to_fit();
+    G4_photon_hit_t.clear();
+    G4_photon_hit_t.shrink_to_fit();
+    G4_photon_hit_wavelength.clear();
+    G4_photon_hit_wavelength.shrink_to_fit();
+
+    Opticks_event_id.clear();
+    Opticks_event_id.shrink_to_fit();
+    Opticks_photon_hit_x.clear();
+    Opticks_photon_hit_x.shrink_to_fit();
+    Opticks_photon_hit_y.clear();
+    Opticks_photon_hit_y.shrink_to_fit();
+
+    Opticks_photon_hit_z.clear();
+    Opticks_photon_hit_z.shrink_to_fit();
+    Opticks_photon_hit_t.clear();
+    Opticks_photon_hit_t.shrink_to_fit();
+    Opticks_photon_hit_wavelength.clear();
+    Opticks_photon_hit_wavelength.shrink_to_fit();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -182,7 +233,12 @@ void AnalysisManager::Save()
   tfile_->cd();
   metadata_->Write();
   event_tree_->Write();
+  G4_Optical_tree_->Write();
+#ifdef With_Opticks
+  Opticks_Optical_tree_->Write();
+#endif
   tfile_->Close();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -192,6 +248,12 @@ void AnalysisManager::EventFill(const AnalysisData& rhs)
   // fill TTree objects per event
   event = rhs;
   event_tree_->Fill();
+  G4_Optical_tree_->Fill();
+#ifdef With_Opticks
+
+  Opticks_Optical_tree_->Fill();
+#endif
+  Reset();
 }
 
 //-----------------------------------------------------------------------------
@@ -204,5 +266,27 @@ void AnalysisManager::FillMetadata()
   useHDDetectorConfiguration_ = ConfigManager::GetUseHDDetectorConfiguration();
   metadata_->Fill();
 }
+void AnalysisManager::AddG4PhotonHits(G4int eventID, double x ,double y, double z,double t, double wavelength ) {
+    //std::cout << "Saving Photon Info" << std::endl;
+    G4AutoLock booklock(&bookMutex);
 
+    G4_photon_hit_x.push_back(x);
+    G4_photon_hit_y.push_back(y);
+    G4_photon_hit_z.push_back(z);
+    G4_photon_hit_t.push_back(t);
+    G4_photon_hit_wavelength.push_back(wavelength);
+    G4event_id.push_back(eventID);
+
+
+}
+
+void AnalysisManager::AddOPhotonHits(G4int eventID,double x ,double y, double z,double t, double wavelength ) {
+    G4AutoLock saveLock(&saveMutex);
+    Opticks_event_id.push_back(eventID);
+    Opticks_photon_hit_x.push_back(x);
+    Opticks_photon_hit_y.push_back(y);
+    Opticks_photon_hit_z.push_back(z);
+    Opticks_photon_hit_t.push_back(t);
+    Opticks_photon_hit_wavelength.push_back(wavelength);
+}
 

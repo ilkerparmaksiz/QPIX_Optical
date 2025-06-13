@@ -117,11 +117,7 @@ void AnalysisData::EventReset()
   hit_energy_deposit_.clear();
   hit_length_.clear();
   hit_process_key_.clear();
-  photon_hit_x.clear();
-  photon_hit_y.clear();
-  photon_hit_z.clear();
-  photon_hit_t.clear();
-  photon_hit_wavelength.clear();
+
 }
 
 //-----------------------------------------------------------------------------
@@ -285,12 +281,6 @@ int AnalysisData::ProcessToKey(const G4String & process)
 
   return key;
 }
-void AnalysisData::AddPhotonHits(double x ,double y, double z,double t, double wavelength ) {
-    photon_hit_x.push_back(x);
-    photon_hit_y.push_back(y);
-    photon_hit_z.push_back(z);
-    photon_hit_t.push_back(t);
-    photon_hit_wavelength.push_back(wavelength);
-}
+
 
 

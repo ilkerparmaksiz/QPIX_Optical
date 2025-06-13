@@ -11,6 +11,7 @@
 
 
 #include "AnalysisData.h"
+#include "AnalysisManager.h"
 
 #include <G4UserSteppingAction.hh>
 
@@ -25,6 +26,7 @@ class SteppingAction: public G4UserSteppingAction
 
   private:
     AnalysisData event;
+    AnalysisManager * analysisManager;
 };
 
 #endif
