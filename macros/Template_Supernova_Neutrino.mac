@@ -5,8 +5,8 @@
 /run/numberOfThreads 1
 
 # configure marley for supernova
-/inputs/particle_type MARLEY
-/inputs/generator MARLEY
+/inputs/particle_type marley
+/inputs/generator marley
 /inputs/MARLEY_json ../cfg/marley_config_supernova.js
 /inputs/isotropic false
 /inputs/override_vertex_position false

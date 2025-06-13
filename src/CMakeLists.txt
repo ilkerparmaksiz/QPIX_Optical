@@ -33,6 +33,9 @@ SET(SRC   ActionInitialization.cpp
           LiquidArgonProperties.cpp
         )
 
+
+
+
 add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC} QPixG4Dict.cxx)
 
 # link to the filesystem library on linux
@@ -40,8 +43,15 @@ if (UNIX AND NOT APPLE)
   target_link_libraries(${CMAKE_PROJECT_NAME} stdc++fs)
 endif ()
 
+
+
+
 # link to GEANT4, ROOT, and MARLEY libraries
 target_link_libraries(${CMAKE_PROJECT_NAME} ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} MARLEY)
+if (With_Opticks)
+    target_link_libraries(${CMAKE_PROJECT_NAME} Opticks::G4CX Opticks::U4)
+    include_directories(${CMAKE_CURRENT_BINARY_DIR})
+endif ()
 
 # generate ROOT dictionary
 ROOT_GENERATE_DICTIONARY(QPixG4Dict AnalysisManager.h LINKDEF LinkDef.h)

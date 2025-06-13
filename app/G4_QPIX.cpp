@@ -36,8 +36,22 @@
 #include <string>
 #include <typeinfo>
 
+#include "../cfg/config.h"
+#ifdef With_Opticks
+#include "SEventConfig.hh"
+#include "OPTICKS_LOG.hh"
+#include <cuda_runtime.h>
+#endif
+
 int main(int argc, char** argv)
 {
+  // Opticks Initialization
+  #ifdef With_Opticks
+       OPTICKS_LOG(argc,argv); // This is needed for opticks
+       cudaDeviceSynchronize();
+       SEventConfig::Initialize();
+       //std::cout<< SEventConfig::Desc() << std::endl;
+  #endif
 
   ConfigManager::Instance();
   //choose the Random engine

@@ -88,7 +88,6 @@ void RunAction::BeginOfRunAction(const G4Run* g4run)
     }
 
     G4String root_output_path = outputFile_;
-
     if (multirun_)
     {
 

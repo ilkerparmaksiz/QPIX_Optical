@@ -79,29 +79,41 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
-    // get MC truth manager
-    MCTruthManager * mc_truth_manager = MCTruthManager::Instance();
+    MCTruthManager* mc_truth_manager = MCTruthManager::Instance();
+    MCParticle* particle = mc_truth_manager->GetMCParticle(track->GetTrackID());
+    auto* PDefi = track->GetDynamicParticle()->GetParticleDefinition();
 
-    // get MC particle
-    MCParticle * particle = mc_truth_manager->GetMCParticle(track->GetTrackID());
-    auto PDefi = track->GetDynamicParticle()->GetParticleDefinition();
-    if(PDefi==G4OpticalPhoton::Definition()){
-        //std::cout << "photon"<<std::endl;
-        particle->SetFinalPosition(
+    // Only care about optical photons
+    if (PDefi == G4OpticalPhoton::Definition()) {
+        // Get the name of the volume where the track ended
+        G4String volName = track->GetStep()->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetName();
+
+        // Check if it died in the silicon detector
+        if (volName == "Photon_detector.physical") {
+            G4ThreeVector pos = track->GetStep()->GetPostStepPoint()->GetPosition();
+            G4double time = track->GetStep()->GetPostStepPoint()->GetGlobalTime();
+
+            // Save in your MCParticle if you want
+            particle->SetFinalPosition(
                 TLorentzVector(
-                        track->GetStep()->GetPostStepPoint()->GetPosition().x() / CLHEP::cm,
-                        track->GetStep()->GetPostStepPoint()->GetPosition().y()  / CLHEP::cm,
-                        track->GetStep()->GetPostStepPoint()->GetPosition().z()  / CLHEP::cm,
-                        track->GetStep()->GetPostStepPoint()->GetGlobalTime()   / CLHEP::ns
+                    pos.x() / CLHEP::cm,
+                    pos.y() / CLHEP::cm,
+                    pos.z() / CLHEP::cm,
+                    time   / CLHEP::ns
                 )
-        );
+            );
+
+            // Print or store
+            std::cout << "[Photon Detection] at Silicon volume:" << std::endl;
+            std::cout << " → Position (cm): " << pos / CLHEP::cm << std::endl;
+            std::cout << " → Time (ns): " << time / CLHEP::ns << std::endl;
+        }
     }
 
-    // set process
-    if (track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep() != 0) {
-      particle->SetProcess(track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName());
+    // Set process name
+    if (track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep() != nullptr) {
+        particle->SetProcess(track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName());
     } else {
-      particle->SetProcess("User Limit");
+        particle->SetProcess("User Limit");
     }
 }
-

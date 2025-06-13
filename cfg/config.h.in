@@ -1,0 +1,3 @@
+//Any Needed Macros defined here
+#cmakedefine With_Opticks
+#cmakedefine With_G4OpticksTest

@@ -1,0 +1,19 @@
+﻿2025-06-13 11:54:08.309 INFO  [4135518] [U4Tree::Create@214] [new U4Tree
+2025-06-13 11:54:08.309 INFO  [4135518] [U4Tree::init@270] -initRayleigh
+2025-06-13 11:54:08.309 INFO  [4135518] [U4Tree::init@272] -initMaterials
+2025-06-13 11:54:08.312 INFO  [4135518] [U4Tree::init@274] -initMaterials_NoRINDEX
+2025-06-13 11:54:08.312 INFO  [4135518] [U4Tree::init@277] -initScint
+2025-06-13 11:54:08.312 INFO  [4135518] [U4Tree::init@280] -initSurfaces
+2025-06-13 11:54:08.312 INFO  [4135518] [U4Tree::init@283] -initSolids
+2025-06-13 11:54:08.313 INFO  [4135518] [U4Tree::init@285] -initNodes
+2025-06-13 11:54:08.313 INFO  [4135518] [U4Tree::init@287] -initSurfaces_Serialize
+2025-06-13 11:54:08.313 INFO  [4135518] [U4Tree::init@290] -initStandard
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@216] ]new U4Tree
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@218] [stree::factorize
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@220] ]stree::factorize
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@222] [U4Tree::identifySensitive
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@224] ]U4Tree::identifySensitive
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@227] [stree::add_inst
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@229] ]stree::add_inst
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@234] [stree::postcreate
+2025-06-13 11:54:08.314 INFO  [4135518] [U4Tree::Create@236] ]stree::postcreate

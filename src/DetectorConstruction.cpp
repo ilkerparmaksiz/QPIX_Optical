@@ -19,8 +19,10 @@
 #include "G4LogicalVolumeStore.hh"
 #include "OpticalMaterialProperties.h"
 #include "CLHEP/Units/SystemOfUnits.h"
-
-
+#include "../cfg/config.h"
+#ifdef With_Opticks
+#include "G4CXOpticks.hh"
+#endif
 DetectorConstruction::DetectorConstruction(): G4VUserDetectorConstruction()
 {
 }
@@ -100,6 +102,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     Photon_detector_logic_vol, "Photon_detector.physical", detector_logic_vol, false, 0, true);
   //////////////////////////////////////////////////////////
 
+#ifdef With_Opticks
+    //std::cout <<"Setting our detector geometry with opticks" <<std::endl;
+    G4CXOpticks::SetGeometry(world_phys_vol);
+    //std::cout << SEventConfig::Desc() <<std::endl;
+#endif
 
 
   return world_phys_vol;
