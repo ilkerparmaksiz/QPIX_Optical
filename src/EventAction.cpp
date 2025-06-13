@@ -17,7 +17,13 @@
 // GEANT4 includes
 #include "G4Event.hh"
 #include "G4GenericMessenger.hh"
-
+#include "../cfg/config.h"
+#ifdef With_Opticks
+#  include "SEvt.hh"
+    #  include "G4CXOpticks.hh"
+    #  include "QSim.hh"
+namespace {G4Mutex opticks_mt =G4MUTEX_INITIALIZER;}
+#endif
 
 EventAction::EventAction():
   G4UserEventAction()
@@ -102,6 +108,41 @@ void EventAction::EndOfEventAction(const G4Event* g4event)
     // write event to ROOT file and reset event variables
     AnalysisManager * analysisManager = AnalysisManager::Instance();
     analysisManager->EventFill(event);
+
+#ifdef With_Opticks
+
+        G4AutoLock lock(&opticks_mt);
+        G4CXOpticks * g4cx=G4CXOpticks::Get();
+
+        G4int eventID=g4event->GetEventID();
+        G4int ngenstep=SEvt::GetNumGenstepFromGenstep(0);
+        G4int nphotons=SEvt::GetNumPhotonCollected(0);
+        G4int hits;
+
+
+
+        // Simulate the photons
+        if(ngenstep>0){
+            //std::cout<<g4cx->desc()<<std::endl;
+            //std::cout<<"--- G4Optickx ---" << g4cx->descSimulate() <<std::endl;
+            //std::cout<< "Simulating Photons " <<ngenstep <<std::endl;
+            g4cx->simulate(eventID,0); // For Simulation
+            cudaDeviceSynchronize();
+
+            hits=SEvt::GetNumHit(0);
+            //std::cout << "DefaultEventAction Hits " << hits<<std::endl;
+            if(hits>0) analysisManager->AddOPhotonHits();
+            std::cout<<"Event " <<eventID <<" Simulating with Opticks nphotons "<< nphotons << " nsteps " << ngenstep << " Hits " <<SEvt::GetNumHit(0) << std::endl;
+            G4CXOpticks::Get()->reset(eventID);
+
+        }
+
+
+        //G4cout<<" Opticks End of Event Action" <<G4endl;
+
+#endif
+
+
     event.EventReset();
 
     // reset event in MC truth manager

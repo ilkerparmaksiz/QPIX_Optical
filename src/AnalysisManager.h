@@ -34,7 +34,7 @@ class AnalysisManager {
     void FillMetadata();
 
     void AddG4PhotonHits(G4int eventID , double x ,double y, double z,double t, double wavelength );
-    void AddOPhotonHits(G4int eventID ,double x ,double y, double z,double t, double wavelength );
+    void AddOPhotonHits();
 
     static AnalysisManager* Instance();
 

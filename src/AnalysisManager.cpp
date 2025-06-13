@@ -19,6 +19,7 @@
 // ROOT includes
 #include "TFile.h"
 #include "TTree.h"
+#include "G4RunManager.hh"
 
 
 #ifdef With_Opticks
@@ -27,6 +28,7 @@
 #include "OpticksPhoton.hh"
 #include "OpticksGenstep.h"
 #include "QSim.hh"
+#include "G4RunManager.hh"
 #endif
 
 namespace {
@@ -289,13 +291,14 @@ void AnalysisManager::AddG4PhotonHits(G4int eventID, double x ,double y, double 
 
 }
 
-void AnalysisManager::AddOPhotonHits(G4int eventID,double x ,double y, double z,double t, double wavelength ) {
+void AnalysisManager::AddOPhotonHits() {
     G4AutoLock saveLock(&saveMutex);
 #ifdef With_Opticks
     SEvt* sev             = SEvt::Get_EGPU();
     std::vector<sphoton> hits;
     sphoton::Get(hits, sev->getHit());
-
+    auto run= G4RunManager::GetRunManager();
+    G4int eventID=run->GetCurrentEvent()->GetEventID();
     for (auto & hit : hits){
         Opticks_event_id.push_back(eventID);
         Opticks_photon_hit_x.push_back(hit.pos.x);

@@ -18,8 +18,12 @@
 #include <G4OpBoundaryProcess.hh>
 #include "G4RunManager.hh"
 #include "G4Scintillation.hh"
-
-
+#include "../cfg/config.h"
+#ifdef With_Opticks
+#include "G4CXOpticks.hh"
+    #include "SEvt.hh"
+    #include "U4.hh"
+#endif
 SteppingAction::SteppingAction(): G4UserSteppingAction()
 {
 
@@ -101,7 +105,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
             // Only care about optical photons
                 auto run= G4RunManager::GetRunManager();
                 G4int eventID=run->GetCurrentEvent()->GetEventID();
-
+                if(pdef->GetParticleName()!="opticalphoton") return;
                 // Get the name of the volume where the track ended
                 G4String volName = track->GetStep()->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetName();
 

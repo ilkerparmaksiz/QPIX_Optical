@@ -62,6 +62,8 @@ G4MaterialPropertiesTable* OpticalMaterialProperties::OpticalLAr()
 
   LAr_mpt->AddProperty("FASTCOMPONENT", sc_energy.data(), intensity.data(), sc_energy.size(),true);
   LAr_mpt->AddProperty("SLOWCOMPONENT", sc_energy.data(), intensity.data(), sc_energy.size(),true);
+  LAr_mpt->AddProperty("REEMISSIONPROB", sc_energy.data(), intensity.data(), sc_energy.size(),true);
+
   LAr_mpt->AddProperty("SCINTILLATIONCOMPONENT1", sc_energy.data(), intensity.data(),sc_energy.size());
   LAr_mpt->AddProperty("SCINTILLATIONCOMPONENT2", sc_energy.data(), intensity.data(),sc_energy.size());
   //LAr_mpt->AddConstProperty("SCINTILLATIONYIELD", 51282.1/MeV);
