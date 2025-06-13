@@ -20,6 +20,15 @@
 #include "TFile.h"
 #include "TTree.h"
 
+
+#ifdef With_Opticks
+#include "SEvt.hh"
+#include "G4CXOpticks.hh"
+#include "OpticksPhoton.hh"
+#include "OpticksGenstep.h"
+#include "QSim.hh"
+#endif
+
 namespace {
   G4Mutex bookMutex = G4MUTEX_INITIALIZER;
   G4Mutex saveMutex = G4MUTEX_INITIALIZER;
@@ -282,11 +291,21 @@ void AnalysisManager::AddG4PhotonHits(G4int eventID, double x ,double y, double 
 
 void AnalysisManager::AddOPhotonHits(G4int eventID,double x ,double y, double z,double t, double wavelength ) {
     G4AutoLock saveLock(&saveMutex);
-    Opticks_event_id.push_back(eventID);
-    Opticks_photon_hit_x.push_back(x);
-    Opticks_photon_hit_y.push_back(y);
-    Opticks_photon_hit_z.push_back(z);
-    Opticks_photon_hit_t.push_back(t);
-    Opticks_photon_hit_wavelength.push_back(wavelength);
+#ifdef With_Opticks
+    SEvt* sev             = SEvt::Get_EGPU();
+    std::vector<sphoton> hits;
+    sphoton::Get(hits, sev->getHit());
+
+    for (auto & hit : hits){
+        Opticks_event_id.push_back(eventID);
+        Opticks_photon_hit_x.push_back(hit.pos.x);
+        Opticks_photon_hit_y.push_back(hit.pos.y);
+        Opticks_photon_hit_z.push_back(hit.pos.z);
+        Opticks_photon_hit_t.push_back(hit.time);
+        Opticks_photon_hit_wavelength.push_back(hit.wavelength);
+    }
+    hits.clear();
+    hits.shrink_to_fit();
+#endif
 }
 
