@@ -23,9 +23,9 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-#include "FTFP_BERT_HP.hh"
+#include "PhysicsList.hh"
+#include "G4OpticalPhysicsOpticks.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4OpticalPhysics.hh"
 
 // ROOT includes
 #include "TROOT.h"
@@ -68,9 +68,9 @@ int main(int argc, char** argv)
 
   // Construct the run manager and set the initialization classes
   auto* run_manager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
-  G4VModularPhysicsList* physics_list = new FTFP_BERT_HP();
-  physics_list->ReplacePhysics(new G4EmStandardPhysics_option4());
-  physics_list->RegisterPhysics(new G4OpticalPhysics());
+  G4VModularPhysicsList* physics_list = new PhysicsList();
+  physics_list->RegisterPhysics(new G4EmStandardPhysics_option4());
+  physics_list->RegisterPhysics(new G4OpticalPhysicsOpticks());
   run_manager->SetUserInitialization(physics_list);
 
   run_manager->SetUserInitialization(new DetectorConstruction());

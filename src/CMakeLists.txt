@@ -31,7 +31,7 @@ SET(SRC   ActionInitialization.cpp
           TrackingHit.cpp
           OpticalMaterialProperties.cpp
           LiquidArgonProperties.cpp
-        )
+          PhysicsList.cpp G4ScintillationOpticks.cpp G4OpticalPhysicsOpticks.cpp G4OpticalPhysicsOpticks.hh)
 
 
 
