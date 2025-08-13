@@ -187,6 +187,7 @@ void AnalysisManager::Book(const std::string& file_path)
           G4_Optical_tree_->Branch("photon_hit_t",    &G4_photon_hit_t);
           G4_Optical_tree_->Branch("photon_hit_wavelength",    &G4_photon_hit_wavelength);
       }
+      /*
 #ifdef With_Opticks
       // Opticks Tree
       if(Opticks_Optical_tree_ == 0){
@@ -200,6 +201,7 @@ void AnalysisManager::Book(const std::string& file_path)
           Opticks_Optical_tree_->Branch("photon_hit_wavelength",    &Opticks_photon_hit_wavelength);
       }
 #endif
+*/
   }
 }
 
@@ -216,7 +218,7 @@ void AnalysisManager::Reset() {
     G4_photon_hit_t.shrink_to_fit();
     G4_photon_hit_wavelength.clear();
     G4_photon_hit_wavelength.shrink_to_fit();
-
+/*
     Opticks_event_id.clear();
     Opticks_event_id.shrink_to_fit();
     Opticks_photon_hit_x.clear();
@@ -230,7 +232,7 @@ void AnalysisManager::Reset() {
     Opticks_photon_hit_t.shrink_to_fit();
     Opticks_photon_hit_wavelength.clear();
     Opticks_photon_hit_wavelength.shrink_to_fit();
-
+*/
 }
 
 //-----------------------------------------------------------------------------
@@ -243,10 +245,10 @@ void AnalysisManager::Save()
   // write TTree objects to file and close file
   tfile_->cd();
   metadata_->Write();
-  event_tree_->Write();
+ // event_tree_->Write();
   G4_Optical_tree_->Write();
 #ifdef With_Opticks
-  Opticks_Optical_tree_->Write();
+  //Opticks_Optical_tree_->Write();
 #endif
   tfile_->Close();
 
@@ -258,15 +260,14 @@ void AnalysisManager::EventFill(const AnalysisData& rhs)
   G4AutoLock fillLock(&fillMutex);
   // fill TTree objects per event
   event = rhs;
-  event_tree_->Fill();
+  //event_tree_->Fill();
   G4_Optical_tree_->Fill();
 #ifdef With_Opticks
 
-  Opticks_Optical_tree_->Fill();
+  // Opticks_Optical_tree_->Fill();
 #endif
   Reset();
 }
-
 //-----------------------------------------------------------------------------
 void AnalysisManager::FillMetadata()
 {
@@ -280,14 +281,15 @@ void AnalysisManager::FillMetadata()
 void AnalysisManager::AddG4PhotonHits(G4int eventID, double x ,double y, double z,double t, double wavelength ) {
     //std::cout << "Saving Photon Info" << std::endl;
     G4AutoLock booklock(&bookMutex);
-
+  // if (t/CLHEP::s > 10){  std::cout <<" Time " <<  t << " time/ns " << t/CLHEP::ns << " time/s " << t/CLHEP::s << std::endl };
+       
     G4_photon_hit_x.push_back(x);
     G4_photon_hit_y.push_back(y);
     G4_photon_hit_z.push_back(z);
     G4_photon_hit_t.push_back(t);
     G4_photon_hit_wavelength.push_back(wavelength);
     G4event_id.push_back(eventID);
-
+   
 
 }
 

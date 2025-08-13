@@ -39,6 +39,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 {
     G4ParticleDefinition* pdef = step->GetTrack()->GetDefinition();
     G4Track* track = step->GetTrack();
+
+
     AnalysisManager::Instance();
 
     if (step->GetPostStepPoint()->GetProcessDefinedStep() != 0){
@@ -114,7 +116,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
                 G4double time = track->GetStep()->GetPostStepPoint()->GetGlobalTime();
                 G4double wavelength=1239.8/step->GetPostStepPoint()->GetTotalEnergy()*CLHEP::eV; //nm
                 AnalysisManager * analysisManager = AnalysisManager::Instance();
-                analysisManager->AddG4PhotonHits(eventID , pos.x() / CLHEP::cm, pos.y() / CLHEP::cm,pos.z() / CLHEP::cm,time / CLHEP::ns,wavelength);
+		analysisManager->AddG4PhotonHits(eventID , pos.x() / CLHEP::cm, pos.y() / CLHEP::cm,pos.z() / CLHEP::cm,time / CLHEP::ns,wavelength);
 
 
         }

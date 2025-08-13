@@ -33,6 +33,12 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     /*if(PDefi==G4OpticalPhoton::Definition()){
         std::cout << "photon"<<std::endl;
     }*/
+
+    // Stop Simulating long lived isotopes
+    G4double maxTime = 3e8*CLHEP::s;
+    if (track->GetGlobalTime() > maxTime) {
+        const_cast<G4Track*>(track)->SetTrackStatus(fStopAndKill);
+    }
     // create new MCParticle object
     MCParticle * particle = new MCParticle();
     particle->SetTrackID(track->GetTrackID());
